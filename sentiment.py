@@ -1,22 +1,13 @@
-from flask import Flask
 from textblob import TextBlob
 import re
-import json
 from twitter import *
 
 t = Twitter(
     auth=OAuth("748419493425197056-JvgR5mGNWfJQgmPblTQvW9MDC1WpH02", "BrYphqpOETnUye01JBznHOiWaLM6e762RIDETcm36kpoM",
                "kXjaifOSjWbmzafTmcEh3qmxc", "gzXFVm8w8MJ7lxLlQDLaJKtch1Qw7aZuBYKfkUszUmZGl7FXOz"))
 
-app = Flask(__name__)
 
-
-@app.route('/')
-def hello_world():
-    return "Hello, world!"
-
-@app.route('/sentiment/<string:term>')
-def sentiment(term):
+def get_sentiment_results(term):
     if re.search("^[\w\s!#$]+$", term):
         statuses = t.search.tweets(q=term, count=100, tweet_mode="extended", result_type="mixed")["statuses"]
         totalPolarity = 0
@@ -64,17 +55,13 @@ def sentiment(term):
         else:
             averageWeighedPolarity = 0
 
-        return json.dumps({"averagePolarity": averagePolarity,
+        return {"averagePolarity": averagePolarity,
                            "averageWeighedPolarity": averageWeighedPolarity,
                            "positiveTweetsCount": positiveTweetsCount,
                            "negativeTweetsCount": negativeTweetsCount,
                            "neutralTweetsCount": neutralTweetsCount,
                            "positiveTweets": positiveTweets,
                            "negativeTweets": negativeTweets,
-                           "neutralTweets": neutralTweets})
+                           "neutralTweets": neutralTweets}
     else:
-        return json.dumps({"error": {"msg": "Search term does not match regular expression", "code": 1}})
-
-
-if __name__ == '__main__':
-    app.run()
+        raise Exception("Invalid term")
