@@ -14,7 +14,7 @@ t = Twitter(
 
 def get_sentiment_results(term):
     sid = SentimentIntensityAnalyzer()
-    if re.search("^[\w\s!#$']+$", term):
+    if re.search("^[\w\s!#$\-']+$", term):
         statuses = \
             t.search.tweets(q='"' + term + '"', lang="en", count=100, tweet_mode="extended", result_type="mixed")[
                 "statuses"]
