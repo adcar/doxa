@@ -2,7 +2,7 @@ aniso8601==7.0.0
 Click==7.0
 dnspython==1.16.0
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-GraphQL==2.0.0
 graphene==2.1.8
 graphene-mongo==0.2.8
